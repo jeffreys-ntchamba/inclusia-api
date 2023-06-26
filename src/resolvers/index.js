@@ -3,4 +3,5 @@ const Mutation = require('./mutations/Mutation.js')
 module.exports ={
     Query,
     Mutation,
+    
 }

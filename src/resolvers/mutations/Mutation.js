@@ -3,9 +3,12 @@ const info = async (parent, args, context) => {
     return "no info"
   }
   
+  const { signUp,signIn} = require("./User")
   
   
   module.exports = {
-    info
+    info,
+    signUp,
+    signIn
   }
   
