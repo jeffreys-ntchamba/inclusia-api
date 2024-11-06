@@ -12,19 +12,24 @@ type Query{
   type Mutation{
      info: String!
      signUp(name: String!, email: String!, password: String!,phone:String!): Fournisseur!
-     DemandeAdhesion(phone: String!, email: String!):User!
+     DemandeAdhesion(phone: String!, email: String!):UserResponse!
      UpdateUser(userId:ID!,name:String!,password:String!):User!
      signIn(name: String!, password: String!): Fournisseur!
      signInUser(name: String!, password: String!): User!
      addProduit(siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: String!):Produit!
      achiveProduit(produiId:ID!):Produit! 
      achiveUser(userId:ID!):User!
-     updateProduit(produiId:ID!,image: String!,besoinDeCapital:Float!,chiffreAffairesPrevisionnel:Float!,tauxRentabilitePrevisionnel:Float!,chiffreAffaireMoyen :Float!,notationGprIndex: String!,siege:String!,coursUnePart:Float!,partDisponible:Float!,name: String!):Produit!
+     updateProduit(produiId:ID!,image: String,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
      addCommande(produitId:ID!,quantite :Float! userId:ID!):Commande!
      
   }
 
- 
+ type UserResponse {
+  id: ID!
+  user: User
+  downloadUrl: String
+}
+
   type User{
   id: ID!
   name: String!
