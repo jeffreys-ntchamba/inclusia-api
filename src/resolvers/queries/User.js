@@ -1,4 +1,4 @@
-const userList = async (parent, args, context) => {
+const UserList = async (parent, args, context) => {
     try{
     const userList= await context.prisma.user.findMany()
     return userList
@@ -9,6 +9,8 @@ const userList = async (parent, args, context) => {
     
   }
 }
+
+
 module.exports = {
-    userList,
+  UserList,
 }

@@ -12,9 +12,54 @@ datasource db {
 
 model User{
   id Int @id @default(autoincrement())
-  name String 
+  name String? @unique 
+  statut Boolean
   email String @unique
+  password String?
   phone String @unique
-  password String
+  commandes Commande[]
+   
  
+}
+model Fournisseur{
+  id Int @id @default(autoincrement())
+  name String @unique 
+  phone String @unique
+  email String @unique
+  password String
+  statut Boolean
+  produits Produit[]
+ 
+}
+model Produit{
+  id Int @id @default(autoincrement())
+  name String 
+  chiffreAffaireMoyen Float
+  notationGprIndex String
+  chiffreAffairesPrevisionnel Float
+  tauxRentabilitePrevisionnel Float
+  besoinDeCapital Float
+  partDisponible Float
+  coursUnePart Float
+  siege String
+  statut Boolean
+  image String
+  fournisseur Fournisseur? @relation(fields: [fournisseurId], references: [id])
+  fournisseurId Int?
+  commande Commande ?
+  
+  
+ 
+}
+model Commande{
+  id Int @id @default(autoincrement())
+  quantite Float
+  produitId Int  @unique
+  userId Int  @unique
+  produit Produit? @relation(fields: [produitId], references: [id])
+  user User? @relation(fields: [userId], references: [id])
+ 
+  
+  
+  
 }
