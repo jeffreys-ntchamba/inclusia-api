@@ -41,8 +41,13 @@ const DemandeAdhesion = async (parent, args, context) => {
   const { phone, email } = args;
 
   try {
-      let user = await context.prisma.user.findUnique({
-          where: { phone }
+      let user = await context.prisma.user.findFirst({
+        where: {
+          OR: [
+              { phone },
+              { email }
+          ]
+      }
       });
 
       if (user) {
@@ -90,34 +95,45 @@ const achiveUser = async (parent, args, context) => {
 }
 const UpdateUser = async (parent, args, context) => {
   console.log("signUp mutation");
-  const { userId,password,name} = args;
+  const { userId, password, name } = args;
 
   let hashedPassword;
   if (password) {
     hashedPassword = await bcrypt.hash(password, 10);
   }
+
   try {
-    
     let user = await context.prisma.user.findUnique({ where: { id: parseFloat(userId) } });
-    if (user) {
-      userUpdate = await context.prisma.user.update({
-        where:{
-            id: parseFloat(userId)
-        },
-        data: {
-            password:hashedPassword, 
-            name:name    
-            
-        }})
+
+    if (!user) {
+      throw new Error("User not found");
     }
-    
-      return userUpdate;
-    
+    const existingUser = await context.prisma.user.findFirst({
+      where: {
+        name: name,
+        id: { not: parseFloat(userId) },
+      },
+    });
+
+    if (existingUser) {
+      throw new Error("User name existant");
+    }
+    const userUpdate = await context.prisma.user.update({
+      where: {
+        id: parseFloat(userId),
+      },
+      data: {
+        password: hashedPassword,
+        name: name,
+      },
+    });
+
+    return userUpdate;
   } catch (e) {
-    console.log("error",e);
-    throw new Error(e);
+    throw new Error(e.message);
   }
 };
+
 const signIn = async (parent, args, context) => {
   const { name, password } = args;
   try {
