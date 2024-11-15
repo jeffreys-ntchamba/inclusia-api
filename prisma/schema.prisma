@@ -43,10 +43,10 @@ model Produit{
   coursUnePart Float
   siege String
   statut Boolean
-  image String
+  image String?
   fournisseur Fournisseur? @relation(fields: [fournisseurId], references: [id])
   fournisseurId Int?
-  commande Commande ?
+  commande Commande[] 
   
   
  
@@ -54,8 +54,9 @@ model Produit{
 model Commande{
   id Int @id @default(autoincrement())
   quantite Float
-  produitId Int  @unique
-  userId Int  @unique
+  produitId Int  
+  userId Int  
+  date DateTime? @default(now())
   produit Produit? @relation(fields: [produitId], references: [id])
   user User? @relation(fields: [userId], references: [id])
  

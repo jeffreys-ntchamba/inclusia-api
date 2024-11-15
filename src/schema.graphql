@@ -1,5 +1,6 @@
 const {gql} = require('apollo-server')
 const typeDefs = gql`
+scalar Upload
 type Query{
   info: String!
   UserList: [User!]!
@@ -16,10 +17,10 @@ type Query{
      UpdateUser(userId:ID!,name:String!,password:String!):User!
      signIn(name: String!, password: String!): Fournisseur!
      signInUser(name: String!, password: String!): User!
-     addProduit(siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: String!):Produit!
+     addProduit(siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!
      achiveProduit(produiId:ID!):Produit! 
      achiveUser(userId:ID!):User!
-     updateProduit(produiId:ID!,image: String,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
+     updateProduit(produiId:ID!,image: Upload,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
      addCommande(produitId:ID!,quantite :Float! userId:ID!):Commande!
      
   }
@@ -51,7 +52,7 @@ type Produit{
   coursUnePart: Float
   siege: String
   statut :Boolean!
-  image: String!
+  image: String
   description: String!
   fournisseurs: Fournisseur!
   commande: Commande!
@@ -79,9 +80,9 @@ type Commande{
   quantite :Float!
   produit: Produit!
   userId:ID!
+  user:User!
+  date:String
 }
-
-
 
 `
 module.exports = {
