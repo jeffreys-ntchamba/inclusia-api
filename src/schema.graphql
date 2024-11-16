@@ -1,21 +1,87 @@
 const {gql} = require('apollo-server')
 const typeDefs = gql`
+scalar Upload
 type Query{
   info: String!
-  userList: [User!]!
+  UserList: [User!]!
+  produitByFournisseur(fournisseurId:ID!):[Produit!]!
+  produitList: [Produit!]!
+  commandeForUser(userId:ID!):[Commande!]!
+  commandeList:[Commande!]!
 }
 
   type Mutation{
      info: String!
-     signUp(name: String!, email: String!, phone: String!, password: String!): User!
-     signIn(email: String!, password: String!): User!
+     signUp(name: String!, email: String!, password: String!,phone:String!): Fournisseur!
+     DemandeAdhesion(phone: String!, email: String!):UserResponse!
+     UpdateUser(userId:ID!,name:String!,password:String!):User!
+     signIn(name: String!, password: String!): Fournisseur!
+     signInUser(name: String!, password: String!): User!
+     addProduit(siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!
+     achiveProduit(produiId:ID!):Produit! 
+     achiveUser(userId:ID!):User!
+     updateProduit(produiId:ID!,image: Upload,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
+     addCommande(produitId:ID!,quantite :Float! userId:ID!):Commande!
+     
   }
+
+ type UserResponse {
+  id: ID!
+  user: User
+  downloadUrl: String
+}
+
   type User{
   id: ID!
   name: String!
   email: String!
+  statut: Boolean
   phone: String!
   password: String!
+  commandes: Commande!
+}
+type Produit{
+  id:ID!
+  name: String! 
+  chiffreAffaireMoyen: Float
+  notationGprIndex: String
+  chiffreAffairesPrevisionnel: Float
+  tauxRentabilitePrevisionnel :Float
+  besoinDeCapital: Float
+  partDisponible: Float
+  coursUnePart: Float
+  siege: String
+  statut :Boolean!
+  image: String
+  description: String!
+  fournisseurs: Fournisseur!
+  commande: Commande!
+}
+
+  
+  
+  
+  
+ 
+type Fournisseur{
+  id:ID!
+  name:String !
+  email: String !
+  password: String!
+  phone: String!
+  statut: Boolean!
+  produits: [Produit!]
+ 
+}
+
+type Commande{
+  id:ID!
+  name: String! 
+  quantite :Float!
+  produit: Produit!
+  userId:ID!
+  user:User!
+  date:String
 }
 
 `
