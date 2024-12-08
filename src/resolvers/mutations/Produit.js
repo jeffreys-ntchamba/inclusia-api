@@ -39,40 +39,57 @@ const axios = require('axios');
       coursUnePart,
       siege,
       name,
-      image,
+      image, // Peut être un fichier GraphQL Upload ou une URI locale
     } = args;
   
     try {
       let imagePath = null;
   
-      // Attendre la résolution de la Promise image
       if (image) {
-        const resolvedImage = await image.promise; // Attendre que la Promise contenue dans l'image soit résolue
-        const { createReadStream, filename } = resolvedImage;
+        // Vérifie si l'image est un fichier GraphQL Upload ou une URI locale
+        if (typeof image === 'object' && image.promise) {
+          // Gère les fichiers envoyés en tant qu'objet GraphQL Upload
+          const resolvedImage = await image.promise;
+          const { createReadStream, filename } = resolvedImage;
   
-        console.log("Resolved Filename:", filename); // Log du nom du fichier pour vérifier qu'il est défini
+          if (filename) {
+            const uploadDir = path.join(__dirname, '../../uploads');
+            if (!fs.existsSync(uploadDir)) {
+              fs.mkdirSync(uploadDir, { recursive: true });
+            }
   
-        if (filename) {
-          const uploadDir = path.join(__dirname, '../../', 'uploads');
-          
-          // Assurez-vous que le dossier 'uploads' existe
+            const filePath = path.join(uploadDir, filename);
+            const stream = createReadStream();
+  
+            await new Promise((resolve, reject) => {
+              const writeStream = fs.createWriteStream(filePath);
+              stream.pipe(writeStream);
+              writeStream.on('finish', resolve);
+              writeStream.on('error', reject);
+            });
+  
+            // Chemin relatif pour la base de données
+            imagePath = `/uploads/${filename}`;
+          } else {
+            console.error("Erreur : Le nom de fichier (filename) est indéfini.");
+          }
+        } else if (typeof image === 'string' && image.startsWith('file://')) {
+          // Gère les URI locales (envoyées depuis une application mobile)
+          const uploadDir = path.join(__dirname, '../../uploads');
           if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir);
+            fs.mkdirSync(uploadDir, { recursive: true });
           }
   
-          const filePath = path.join(uploadDir, filename);
-          const stream = createReadStream();
-          await new Promise((resolve, reject) => {
-            const writeStream = fs.createWriteStream(filePath);
-            stream.pipe(writeStream);
-            writeStream.on('finish', resolve);
-            writeStream.on('error', reject);
-          });
+          const localFilePath = image.replace('file://', ''); // Supprime le préfixe 'file://'
+          const filename = path.basename(localFilePath);
+          const destinationPath = path.join(uploadDir, filename);
   
-          // Chemin relatif pour sauvegarder dans la base de données
+          fs.copyFileSync(localFilePath, destinationPath);
+  
+          // Chemin relatif pour la base de données
           imagePath = `/uploads/${filename}`;
         } else {
-          console.error("Erreur : Le nom de fichier (filename) est indéfini.");
+          console.error("Erreur : Format d'image non pris en charge.");
         }
       } else {
         console.error("Erreur : L'image n'est pas fournie dans la requête.");
@@ -96,13 +113,11 @@ const axios = require('axios');
       });
   
       return createProduit;
-  
     } catch (e) {
       console.error('Error :', e);
       throw new Error("Erreur lors de la création du produit");
     }
   };
-  
 
   
   const updateProduit = async (parent, args, context) => {

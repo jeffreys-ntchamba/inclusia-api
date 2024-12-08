@@ -62,7 +62,7 @@ const DemandeAdhesion = async (parent, args, context) => {
           }
       });
 
-      const fileDownloadUrl = `${context.req.protocol}://${context.req.get('host')}/downloads/FORMULAIRE.pdf`;
+      const fileDownloadUrl = `${context.req.protocol}://${context.req.get('host')}/downloads/Formulaire de demande d'adhésion.pdf`;
       
       return {
           id: user.id, 
