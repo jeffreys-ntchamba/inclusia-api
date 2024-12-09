@@ -26,7 +26,9 @@ catch(e){
 }
 const produitList = async (parent, args, context) => {
   try{
-  const produitList= await context.prisma.produit.findMany()
+  const produitList= await context.prisma.produit.findMany({where:{
+    statut: false
+  }})
   return produitList
 }
 catch(e){
