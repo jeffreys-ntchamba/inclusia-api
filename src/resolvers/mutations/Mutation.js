@@ -3,7 +3,7 @@ const info = async (parent, args, context) => {
     return "no info"
   }
   
-  const { signUp,signIn,DemandeAdhesion,achiveUser,UpdateUser,signInUser} = require("./User")
+  const { signUp,signIn,DemandeAdhesion,achiveUser,UpdateUser,signInUser,UpdatePasswordAdmin} = require("./User")
   const { addProduit,achiveProduit,updateProduit,addCommande} = require("./Produit")
   
   
@@ -18,6 +18,7 @@ const info = async (parent, args, context) => {
     DemandeAdhesion,
     achiveUser,
     UpdateUser,
-    signInUser
+    signInUser,
+    UpdatePasswordAdmin
   }
   

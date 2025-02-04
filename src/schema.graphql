@@ -15,6 +15,7 @@ type Query{
      signUp(name: String!, email: String!, password: String!,phone:String!): Fournisseur!
      DemandeAdhesion(phone: String!, email: String!):UserResponse!
      UpdateUser(userId:ID!,name:String!,password:String!):User!
+     UpdatePasswordAdmin(userId:ID!,password:String!):Fournisseur!
      signIn(name: String!, password: String!): Fournisseur!
      signInUser(name: String!, password: String!): User!
      addProduit(siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!

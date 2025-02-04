@@ -188,7 +188,34 @@ const signInUser = async (parent, args, context) => {
   }
 };
 
+const UpdatePasswordAdmin = async (parent, args, context) => {
+  const { userId, password } = args;
 
+  let hashedPassword;
+  if (password) {
+    hashedPassword = await bcrypt.hash(password, 10);
+  }
+  try {
+    let Fournisseur = await context.prisma.fournisseur.findUnique({ where: { id: parseFloat(userId) } });
+
+    if (!Fournisseur) {
+      throw new Error("Admin not found");
+    }
+    else
+   { const fournisseurUpdate = await context.prisma.fournisseur.update({
+      where: {
+        id: parseFloat(userId),
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return fournisseurUpdate;}
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
 
 
 module.exports = {
@@ -197,5 +224,6 @@ module.exports = {
   signInUser,
   DemandeAdhesion,
   UpdateUser,
-  achiveUser
+  achiveUser,
+  UpdatePasswordAdmin
 };
