@@ -18,9 +18,9 @@ const userSeeds = async () => {
   const users = [
     {
       name: "Admin Light",
-      email: "lightMarket@gmail.com",
+      email: "light.invest.sarl@gmail.com",
       password: "adminLight",
-      phone: "699999999",
+      phone: "653687583",
       statut: false,
     },
   ];
