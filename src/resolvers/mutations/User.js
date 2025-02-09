@@ -40,40 +40,53 @@ const DemandeAdhesion = async (parent, args, context) => {
   console.log("signUp mutation");
   const { phone, email } = args;
 
-  try {
-      let user = await context.prisma.user.findFirst({
-        where: {
-          OR: [
-              { phone },
-              { email }
-          ]
-      }
-      });
-
-      if (user) {
-          throw new Error("Utilisateur existant");
-      }
-
-      user = await context.prisma.user.create({
-          data: {
-              phone,
-              email,
-              statut: false
-          }
-      });
-
-      const fileDownloadUrl = `${context.req.protocol}://${context.req.get('host')}/downloads/Formulaire de demande d'adhésion.pdf`;
-      
-      return {
-          id: user.id, 
-          user, 
-          downloadUrl: fileDownloadUrl 
-      };
-
-  } catch (e) {
-      console.error("Erreur lors de l'inscription :", e.message);
-      throw new Error(e.message);
+  // Validation des entrées
+  if (!phone || !email) {
+    throw new Error("Le téléphone et l'email sont obligatoires.");
   }
+
+  try {
+    // Vérifie si l'utilisateur existe déjà
+    const user = await context.prisma.user.findFirst({
+      where: {
+        OR: [{ phone }, { email }],
+      },
+    });
+
+    if (user) {
+      throw new Error("Un utilisateur avec ce téléphone ou cet email existe déjà.");
+    }
+
+    // Crée un nouvel utilisateur
+    const newUser = await context.prisma.user.create({
+      data: {
+        phone,
+        email,
+        statut: false,
+      },
+    });
+
+    // Génère un token temporaire pour sécuriser le téléchargement
+    const token = generateDownloadToken(newUser.id); // À implémenter
+    const downloadEndpoint = `${context.req.protocol}://${context.req.get('host')}/download-file?token=${token}`;
+
+    return {
+      id: newUser.id,
+      user: newUser,
+      downloadUrl: downloadEndpoint, // Renvoie un endpoint sécurisé pour le téléchargement
+    };
+  } catch (e) {
+    console.error("Erreur lors de l'inscription :", e.message);
+    throw new Error("Une erreur est survenue lors de l'inscription. Veuillez réessayer.");
+  }
+};
+
+// Fonction pour générer un token de téléchargement (exemple avec JWT)
+const generateDownloadToken = (userId) => {
+  const jwt = require('jsonwebtoken');
+  const secret = 'votre-secret'; // Remplacez par une clé secrète forte
+  const token = jwt.sign({ userId, file: 'Formulaire_de_demande_d_adhésion.pdf' }, secret, { expiresIn: '5m' }); // Expire après 5 minutes
+  return token;
 };
 
 
