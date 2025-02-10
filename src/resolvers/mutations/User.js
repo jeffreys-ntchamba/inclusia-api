@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
-
+const fs = require('fs');
+const path = require('path');
 
 
 
@@ -36,43 +37,54 @@ const signUp = async (parent, args, context) => {
   }
 };
 
+
+
 const DemandeAdhesion = async (parent, args, context) => {
   console.log("signUp mutation");
   const { phone, email } = args;
 
   try {
-      let user = await context.prisma.user.findFirst({
-        where: {
-          OR: [
-              { phone },
-              { email }
-          ]
+    let user = await context.prisma.user.findFirst({
+      where: {
+        OR: [
+          { phone },
+          { email }
+        ]
       }
-      });
+    });
 
-      if (user) {
-          throw new Error("Utilisateur existant");
+    if (user) {
+      throw new Error("Utilisateur existant");
+    }
+
+    user = await context.prisma.user.create({
+      data: {
+        phone,
+        email,
+        statut: false
       }
+    });
 
-      user = await context.prisma.user.create({
-          data: {
-              phone,
-              email,
-              statut: false
-          }
-      });
+    // Chemin vers le fichier PDF
+    const filePath = path.join(__dirname, '../../const', 'Formulaire de demande d\'adhésion.pdf');
 
-      const fileDownloadUrl = `${context.req.protocol}://${context.req.get('host')}/downloads/Formulaire de demande d'adhésion.pdf`;
-      
-      return {
-          id: user.id, 
-          user, 
-          downloadUrl: fileDownloadUrl 
-      };
+    // Lire le fichier PDF
+    const fileContent = fs.readFileSync(filePath, { encoding: 'base64' });
+
+    return {
+      id: user.id,
+      user,
+      file: {
+        filename: 'Formulaire de demande d\'adhésion.pdf',
+        mimetype: 'application/pdf',
+        encoding: 'base64',
+        content: fileContent
+      }
+    };
 
   } catch (e) {
-      console.error("Erreur lors de l'inscription :", e.message);
-      throw new Error(e.message);
+    console.error("Erreur lors de l'inscription :", e.message);
+    throw new Error(e.message);
   }
 };
 

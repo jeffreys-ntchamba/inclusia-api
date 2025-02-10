@@ -29,9 +29,15 @@ type Query{
  type UserResponse {
   id: ID!
   user: User
-  downloadUrl: String
+  file: File
 }
 
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+  content: String!
+}
   type User{
   id: ID!
   name: String!
