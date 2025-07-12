@@ -44,6 +44,7 @@ model Produit{
   siege String
   statut Boolean
   image String?
+  categorie String?
   fournisseur Fournisseur? @relation(fields: [fournisseurId], references: [id])
   fournisseurId Int?
   commande Commande[] 
@@ -63,4 +64,12 @@ model Commande{
   
   
   
+}
+
+model Ticker {
+  id        Int   @id @default(1)
+  text      String
+  duration  Int      @default(10000)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
