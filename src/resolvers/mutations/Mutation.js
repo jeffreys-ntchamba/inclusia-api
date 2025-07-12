@@ -5,6 +5,9 @@ const info = async (parent, args, context) => {
   
   const { signUp,signIn,DemandeAdhesion,achiveUser,UpdateUser,signInUser,UpdatePasswordAdmin} = require("./User")
   const { addProduit,achiveProduit,updateProduit,addCommande} = require("./Produit")
+  const { upsertTicker} = require("./Ticker")
+
+  
   
   
   module.exports = {
@@ -19,6 +22,7 @@ const info = async (parent, args, context) => {
     achiveUser,
     UpdateUser,
     signInUser,
-    UpdatePasswordAdmin
+    UpdatePasswordAdmin,
+    upsertTicker
   }
   

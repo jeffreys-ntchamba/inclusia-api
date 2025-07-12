@@ -40,6 +40,7 @@ const axios = require('axios');
       siege,
       name,
       image, // Peut être un fichier GraphQL Upload ou une URI locale
+      categorie
     } = args;
   
     try {
@@ -109,6 +110,7 @@ const axios = require('axios');
           siege,
           image: imagePath,
           statut: false,
+          categorie
         },
       });
   
