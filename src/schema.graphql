@@ -8,6 +8,8 @@ type Query{
   produitList: [Produit!]!
   commandeForUser(userId:ID!):[Commande!]!
   commandeList:[Commande!]!
+  getTicker: Ticker
+  produitsParCategorie(categorie: String!): [Produit!]!
 }
 
   type Mutation{
@@ -18,11 +20,12 @@ type Query{
      UpdatePasswordAdmin(userId:ID!,password:String!):Fournisseur!
      signIn(name: String!, password: String!): Fournisseur!
      signInUser(name: String!, password: String!): User!
-     addProduit(siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!
+     addProduit(categorie:String!,siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!
      achiveProduit(produiId:ID!):Produit! 
      achiveUser(userId:ID!):User!
      updateProduit(produiId:ID!,image: Upload,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
      addCommande(produitId:ID!,quantite :Float! userId:ID!):Commande!
+     upsertTicker(text: String!, duration: Int): Ticker!
      
   }
 
@@ -63,6 +66,7 @@ type Produit{
   description: String!
   fournisseurs: Fournisseur!
   commande: Commande!
+  categorie: String!
 }
 
   
@@ -90,6 +94,19 @@ type Commande{
   user:User!
   date:String
 }
+
+type Ticker {
+  id: Int!
+  text: String!
+  duration: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+
+
+ 
+
+
 
 `
 module.exports = {
