@@ -3,7 +3,11 @@ const info = async (parent, args, context) => {
   return "no info"
 }
 const {UserList} = require("./User")
-const {produitList, commandeForUser,commandeList} = require("./Produit")
+const {produitList, commandeForUser,commandeList,produitsParCategorie} = require("./Produit")
+const {getTicker} = require("./Ticker")
+
+
+
 
 
 
@@ -12,5 +16,7 @@ module.exports = {
   UserList,
   produitList,
   commandeForUser,
-  commandeList
+  commandeList,
+  getTicker,
+  produitsParCategorie
 }

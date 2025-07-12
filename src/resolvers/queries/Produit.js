@@ -37,8 +37,28 @@ catch(e){
   
 }
 }
+
+const produitsParCategorie = async (parent, args, context) => {
+  const { categorie } = args;
+
+  try {
+    const produits = await context.prisma.produit.findMany({
+      where: {
+        categorie: categorie,
+        statut: false,
+      },
+    });
+
+    return produits;
+  } catch (e) {
+    console.log("error",e)
+  throw new Error(e)
+  }
+};
+
 module.exports = {
     produitList,
     commandeForUser,
-    commandeList
+    commandeList,
+    produitsParCategorie
 }
