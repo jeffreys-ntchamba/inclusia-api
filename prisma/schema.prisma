@@ -45,6 +45,8 @@ model Produit{
   statut Boolean
   image String?
   categorie String?
+  secteur String?
+  description String?
   fournisseur Fournisseur? @relation(fields: [fournisseurId], references: [id])
   fournisseurId Int?
   commande Commande[] 

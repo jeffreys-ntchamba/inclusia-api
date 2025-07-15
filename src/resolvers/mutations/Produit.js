@@ -40,7 +40,9 @@ const axios = require('axios');
       siege,
       name,
       image, // Peut être un fichier GraphQL Upload ou une URI locale
-      categorie
+      categorie,
+      secteur,
+      description
     } = args;
   
     try {
@@ -110,7 +112,9 @@ const axios = require('axios');
           siege,
           image: imagePath,
           statut: false,
-          categorie
+          categorie,
+          secteur,
+          description
         },
       });
   
@@ -123,7 +127,7 @@ const axios = require('axios');
 
   
   const updateProduit = async (parent, args, context) => {
-    const { produiId,name, chiffreAffaireMoyen,notationGprIndex,chiffreAffairesPrevisionnel,tauxRentabilitePrevisionnel,besoinDeCapital,partDisponible,coursUnePart,siege, image} = args
+    const { produiId,name, chiffreAffaireMoyen,notationGprIndex,chiffreAffairesPrevisionnel,tauxRentabilitePrevisionnel,besoinDeCapital,partDisponible,coursUnePart,siege, image,categorie,secteur,description} = args
     try{
     let imagePath = null;
   
@@ -174,7 +178,10 @@ const axios = require('axios');
             besoinDeCapital:besoinDeCapital,
             partDisponible:partDisponible,
             coursUnePart:coursUnePart,
-            siege:siege
+            siege:siege,
+            categorie:categorie,
+            secteur:secteur,
+            description:description
             
             
 
