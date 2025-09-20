@@ -20,10 +20,10 @@ type Query{
      UpdatePasswordAdmin(userId:ID!,password:String!):Fournisseur!
      signIn(name: String!, password: String!): Fournisseur!
      signInUser(name: String!, password: String!): User!
-     addProduit(description:String!,secteur:String!,categorie:String!,siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!
+     addProduit(descriptChiffreAffaireMoyen:String!,descriptChiffreAffairesPrevisionnel:String!,descriptRentabilitePrevisionnel:String!,descriptionBesoinDeCapital:String!,description:String!,secteur:String!,categorie:String!,siege:String!,coursUnePart:Float!,partDisponible:Float!, besoinDeCapital:Float!, tauxRentabilitePrevisionnel:Float!,chiffreAffairesPrevisionnel:Float!,chiffreAffaireMoyen:Float!,notationGprIndex:String!,name: String!,image: Upload):Produit!
      achiveProduit(produiId:ID!):Produit! 
      achiveUser(userId:ID!):User!
-     updateProduit(description:String,secteur:String,categorie:String,produiId:ID!,image: Upload,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
+     updateProduit(descriptChiffreAffaireMoyen:String,descriptChiffreAffairesPrevisionnel:String,descriptRentabilitePrevisionnel:String,descriptionBesoinDeCapital:String,description:String,secteur:String,categorie:String,produiId:ID!,image: Upload,besoinDeCapital:Float,chiffreAffairesPrevisionnel:Float,tauxRentabilitePrevisionnel:Float,chiffreAffaireMoyen :Float,notationGprIndex: String,siege:String,coursUnePart:Float,partDisponible:Float,name: String):Produit!
      addCommande(produitId:ID!,quantite :Float! userId:ID!):Commande!
      upsertTicker(text: String!, duration: Int): Ticker!
      
@@ -54,10 +54,14 @@ type Produit{
   id:ID!
   name: String! 
   chiffreAffaireMoyen: Float
+  descriptChiffreAffaireMoyen:String
   notationGprIndex: String
   chiffreAffairesPrevisionnel: Float
+  descriptChiffreAffairesPrevisionnel: String
   tauxRentabilitePrevisionnel :Float
+   descriptRentabilitePrevisionnel: String
   besoinDeCapital: Float
+  descriptionBesoinDeCapital: String
   partDisponible: Float
   coursUnePart: Float
   siege: String

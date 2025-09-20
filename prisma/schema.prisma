@@ -35,10 +35,14 @@ model Produit{
   id Int @id @default(autoincrement())
   name String 
   chiffreAffaireMoyen Float
+  descriptChiffreAffaireMoyen String
   notationGprIndex String
   chiffreAffairesPrevisionnel Float
+   descriptChiffreAffairesPrevisionnel String
   tauxRentabilitePrevisionnel Float
+  descriptRentabilitePrevisionnel String
   besoinDeCapital Float
+  descriptionBesoinDeCapital String
   partDisponible Float
   coursUnePart Float
   siege String
